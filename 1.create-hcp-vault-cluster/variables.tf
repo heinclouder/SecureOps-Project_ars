@@ -5,7 +5,7 @@ variable "cloud_provider" {
 }
 
 variable "region" {
-    description = "Cloud Provider Region Name"
+    description = "Cloud Provider Region"
     type = string
     default = "ap-southeast-1"
 }
@@ -31,5 +31,5 @@ variable "vault_hvn" {
 variable "tier_type" {
     description = "Vault Cluster Tier Type"
     type = string
-    default = "starter_small"
+    default = "dev"
 }
