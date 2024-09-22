@@ -70,17 +70,17 @@ path "sys/policies/" {
 }
 EOT
 }
-# resource "vault_jwt_auth_backend_role" "secureops_jwt_backend_role" {
-#   backend         = vault_jwt_auth_backend.secureops-jwt-backend.path
-#   role_name       = "vault-jwt-auth-role"
-#   token_policies  = [vault_policy.admin-policy.name]
-#   bound_audiences = ["vault.workload.identity"]
-#   bound_claims_type = "glob"
-#   bound_claims= {
-#     sub: "organization:ars_secure
-# Ops_prj:project:ars_secureOps_project:workspce:*:run_phase:apply"
-#   }
-#   user_claim      = "terraform_full_workspace"
-#   role_type       = "jwt"
-#   token_ttl       = 1200
-# }
+resource "vault_jwt_auth_backend_role" "secureops_jwt_backend_role" {
+  backend         = vault_jwt_auth_backend.secureops-jwt-backend.path
+  role_name       = "vault-jwt-auth-role"
+  token_policies  = [vault_policy.admin-policy.name]
+  bound_audiences = ["vault.workload.identity"]
+  bound_claims_type = "glob"
+  bound_claims= {
+    sub: "organization:ars_secure
+Ops_prj:project:ars_secureOps_project:workspce:*:run_phase:apply"
+  }
+  user_claim      = "terraform_full_workspace"
+  role_type       = "jwt"
+  token_ttl       = 1200
+}
