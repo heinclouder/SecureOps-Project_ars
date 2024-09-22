@@ -8,68 +8,45 @@ resource "vault_jwt_auth_backend" "secureops-jwt-backend" {
 
 resource "vault_policy" "admin-policy" {
   name = "admin-policy"
-
+  
   policy = <<EOT
-path "auth/*"
-{
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-# Create, update, and delete auth methods
-path "sys/auth/*"
-{
-  capabilities = ["create", "update", "delete", "sudo"]
-}
-# List auth methods
-path "sys/auth"
-{
+# Allow tokens to query themselves
+path "auth/token/lookup-self" {
   capabilities = ["read"]
 }
-# Enable and manage the key/value secrets engine at `secret/` path
-# List, create, update, and delete key/value secrets
-path "secret/*"
-{
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+
+# Allow tokens to renew themselves
+path "auth/token/renew-self" {
+    capabilities = ["update"]
 }
-# Manage secrets engines
-path "sys/mounts/*"
-{
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+
+# Allow tokens to revoke themselves
+path "auth/token/revoke-self" {
+    capabilities = ["update"]
 }
-# List existing secrets engines.
-path "sys/mounts"
-{
-  capabilities = ["read"]
+
+path "sys/mounts" {
+  capabilities = ["list", "read"]
 }
-# Manage system backend
-path "db/*"
-{
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+
+path "sys/mounts/example" {
+  capabilities = ["create", "read", "update", "patch", "delete", "list"]
 }
-# List existing secrets engines.
-path "db/"
-{
-  capabilities = ["read"]
+
+path "example/*" {
+  capabilities = ["create", "read", "update", "patch", "delete", "list"]
 }
-path "aws-master-account/" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+
+path "sys/mounts/example" {
+  capabilities = ["create", "read", "update", "patch", "delete", "list"]
 }
-path "aws-master-account/*" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+path "example/*" {
+  capabilities = ["create", "read", "update", "patch", "delete", "list"]
 }
-path "sys/policy/*" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-path "sys/policy/" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-path "sys/policies/*" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-path "sys/policies/" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
+
 EOT
 }
+
 
 resource "vault_jwt_auth_backend_role" "secureops_jwt_backend_role" {
   backend         = vault_jwt_auth_backend.secureops-jwt-backend.path
