@@ -70,6 +70,7 @@ path "sys/policies/" {
 }
 EOT
 }
+
 resource "vault_jwt_auth_backend_role" "secureops_jwt_backend_role" {
   backend         = vault_jwt_auth_backend.secureops-jwt-backend.path
   role_name       = "vault-jwt-auth-role"
